@@ -9,4 +9,6 @@ export function getCommands(prefix = '!') {
   return output;
 }
 
-getCommands() //?
+export function getMessageContent() {}
+
+getCommands();

@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 import { Client } from 'discord.js';
 import * as utils from './util';
+import * as controller from './controller';
 import fs from 'fs';
 config();
 
@@ -13,6 +14,8 @@ client.once('ready', () => {
 });
 
 client.on('message', async message => {
+  // return controller.sendEmbed('oi', message);
+
   // get the first word.
   // check if it is a command
   // second word will be the link
@@ -22,27 +25,23 @@ client.on('message', async message => {
   // } else {
   //   console.log('oioioi:', message.content);
   // }
-  console.log('content:', message.content);
+  // console.log('content:', message.content);
   // if message is !play or something
-  if (message.content === 'pause') {
-    return dispatcher.pause();
-  } else if (message.content === 'resume') {
-    return dispatcher.resume();
-  }
-  else {
+  if (message.content === 'lalalala') {
     if (message.member.voice.channel) {
-      /*
-      connection.play(fs.createReadStream('./media.ogg'), {
-  type: 'ogg/opus',
-});
-      */
       const connection = await message.member.voice.channel.join();
-      dispatcher = connection.play(fs.createReadStream('./lala.mp3'));
+      dispatcher = connection.play(fs.createReadStream('./public.ogg'));
       /*
       stop
       dispatcher.destroy();
        */
     }
+  }
+  if (message.content === 'pause') {
+    return dispatcher.pause();
+  }
+  if (message.content === 'resume') {
+    return dispatcher.resume();
   }
 });
 
