@@ -54,9 +54,3 @@ client.on('message', async message => {
 client.login(process.env.BOT_TOKEN, () => {
   commands = utils.getCommands(process.env.BOT_PREFIX);
 });
-
-/*
-temp: 
-return embed preview:
-https://discordjs.guide/popular-topics/embeds.html#using-the-richembedmessageembed-constructor
-*/
