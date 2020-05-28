@@ -1,6 +1,6 @@
 import commands from './commands';
 
-export function getCommands(prefix = '!') {
+export function buildCommands(prefix = '!') {
   const output = Object.entries(commands).reduce((acc, [key, value]) => {
     acc[`${prefix}${key}`] = value;
     return acc;
@@ -8,7 +8,3 @@ export function getCommands(prefix = '!') {
 
   return output;
 }
-
-export function getMessageContent() {}
-
-getCommands();

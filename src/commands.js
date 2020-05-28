@@ -1,7 +1,15 @@
+import {sendEmbed} from './controller'
+
+
+
 export default {
-  oi: {
-    aMethod() {
-      return 'oi';
+  summon: {
+    joinChannel(message) {
+      if (message.member.voice.channel) {
+        
+      }
+      return connection
     },
+    feedbackMsg: ``
   },
 };

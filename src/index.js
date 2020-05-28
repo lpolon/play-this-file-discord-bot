@@ -7,6 +7,7 @@ config();
 
 let commands;
 let dispatcher;
+let connection
 const client = new Client();
 
 client.once('ready', () => {
@@ -14,7 +15,6 @@ client.once('ready', () => {
 });
 
 client.on('message', async message => {
-  // return controller.sendEmbed('oi', message);
 
   // get the first word.
   // check if it is a command
@@ -52,5 +52,5 @@ client.on('message', async message => {
 });
 
 client.login(process.env.BOT_TOKEN, () => {
-  commands = utils.getCommands(process.env.BOT_PREFIX);
+  commands = utils.buildCommands(process.env.BOT_PREFIX);
 });
