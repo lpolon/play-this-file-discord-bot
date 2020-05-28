@@ -27,7 +27,7 @@ client.on('message', async message => {
   // }
   // console.log('content:', message.content);
   // if message is !play or something
-  if (message.content === 'lalalala') {
+  if (message.content === 'summon') {
     if (message.member.voice.channel) {
       const connection = await message.member.voice.channel.join();
       dispatcher = connection.play(fs.createReadStream('./public.ogg'));
@@ -35,13 +35,19 @@ client.on('message', async message => {
       stop
       dispatcher.destroy();
        */
+      console.log('Starting...');
     }
   }
   if (message.content === 'pause') {
+    console.log('Paused');
     return dispatcher.pause();
   }
   if (message.content === 'resume') {
+    console.log('Resuming...');
     return dispatcher.resume();
+  }
+  if (message.content === 'rewind') {
+    return dispatcher.rewind();
   }
 });
 
