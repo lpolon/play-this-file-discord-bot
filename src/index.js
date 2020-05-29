@@ -2,55 +2,33 @@ import { config } from 'dotenv';
 import { Client } from 'discord.js';
 import * as utils from './util';
 import * as controller from './controller';
-import fs from 'fs';
 config();
 
 let commands;
-let dispatcher;
-let connection
+const prefix = process.env.BOT_PREFIX ?? '!';
+const state = {
+  dispatcher: null,
+  connection: null,
+};
+
 const client = new Client();
 
 client.once('ready', () => {
+  commands = utils.buildCommands(prefix);
   console.log('ready!');
 });
 
 client.on('message', async message => {
-
-  // get the first word.
-  // check if it is a command
-  // second word will be the link
-  // .split(/ +/)
-  // if (!(message.content in commands)) {
-  //   console.log('o comando não existe');
-  // } else {
-  //   console.log('oioioi:', message.content);
-  // }
-  // console.log('content:', message.content);
-  // if message is !play or something
-  if (message.content === 'summon') {
-    if (message.member.voice.channel) {
-      const connection = await message.member.voice.channel.join();
-      dispatcher = connection.play(fs.createReadStream('./public.ogg'));
-      /*
-      stop
-      dispatcher.destroy();
-       */
-      console.log('Starting...');
-    }
-  }
-  if (message.content === 'pause') {
-    console.log('Paused');
-    return dispatcher.pause();
-  }
-  if (message.content === 'resume') {
-    console.log('Resuming...');
-    return dispatcher.resume();
-  }
-  if (message.content === 'rewind') {
-    return dispatcher.rewind();
-  }
+  const { content } = message;
+  const [userInput] = content.split(/ +/);
+  if (content[0] !== prefix) return;
+  if (!(userInput in commands))
+    return controller.sendEmbed(
+      `nenhum comando encontrado. Digite ${prefix}help para ver lista de comandos`,
+      message,
+    );
+  if (userInput === `${prefix}help`) return commands[userInput](message);
+  else await commands[userInput].method(message, state);
 });
 
-client.login(process.env.BOT_TOKEN, () => {
-  commands = utils.buildCommands(process.env.BOT_PREFIX);
-});
+client.login(process.env.BOT_TOKEN);
