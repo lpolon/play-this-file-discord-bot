@@ -1,14 +1,8 @@
 import commands from './commands';
 
-export function getCommands(prefix = '!') {
-  const output = Object.entries(commands).reduce((acc, [key, value]) => {
+export function buildCommands(prefix = '!') {
+  return Object.entries(commands).reduce((acc, [key, value]) => {
     acc[`${prefix}${key}`] = value;
     return acc;
   }, {});
-
-  return output;
 }
-
-export function getMessageContent() {}
-
-getCommands();
