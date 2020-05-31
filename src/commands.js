@@ -8,7 +8,7 @@ export default {
   },
   play: {
     method: controller.play,
-    description: 'start playing audio',
+    description: `start audio`,
   },
   pause: {
     method: controller.pause,
@@ -17,6 +17,11 @@ export default {
   resume: {
     method: controller.resume,
     description: 'resume audio',
+  },
+  leave: {
+    method: controller.leave,
+    description:
+      'disconnect bot from channel and reset state',
   },
   help(message) {
     const commandList = Object.entries(this).reduce(
@@ -31,11 +36,7 @@ export default {
       },
       [],
     );
-    const embed = new MessageEmbed({ title: 'comandos', fields: commandList });
+    const embed = new MessageEmbed({ title: 'Commands', fields: commandList });
     message.channel.send(embed);
   },
 };
-
-// if (message.content === 'rewind') {
-//   return dispatcher.rewind();
-// }

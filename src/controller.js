@@ -16,25 +16,32 @@ async function joinChannel(message, state) {
 }
 
 async function play(message, state) {
-  if (!message.member.voice.channel)
-    return sendEmbed('entra no canal primeiro!');
-
-  if (state.connection) {
-    state.dispatcher = state.connection.play(createReadStream('./public.ogg'));
+  /*
+  if arg, get time in seconds, play with it.
+  */
+ if (state.connection === null) await joinChannel(message, state)
+  state.connection.play(createReadStream('./test.ogg'), {
+    seek: 0,
+  });
     sendEmbed('playing...', message);
-  } else {
-    state.connection = await message.member.voice.channel.join();
-    state.dispatcher = state.connection.play(createReadStream('./public.ogg'));
   }
+
+// TODO: MÉTODO REWIND
+
+function leave(message, state) {
+  state.connection.disconnect();
+  state.connection = null;
+  state.seekInput = 0;
+  sendEmbed('bye!', message)
 }
 
-function pause(message, { dispatcher }) {
+function pause(message, { currentPlaytime, connection: { dispatcher } }) {
   dispatcher.pause();
   sendEmbed('paused', message);
 }
-function resume(message, { dispatcher }) {
+function resume(message, {currentPlaytime, connection: {dispatcher}}) {
   dispatcher.resume();
   sendEmbed('resumed', message);
 }
 
-export { sendEmbed, joinChannel, play, pause, resume };
+export { sendEmbed, joinChannel, play, pause, resume, leave };

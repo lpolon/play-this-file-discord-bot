@@ -6,8 +6,7 @@ config();
 
 let commands;
 const prefix = process.env.BOT_PREFIX ?? '!';
-const state = {
-  dispatcher: null,
+let state = {
   connection: null,
 };
 
