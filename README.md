@@ -12,5 +12,5 @@ A discord bot to download a mp3 file and play it through voice chat
 ### Run
 
 * run docker-compose build && docker-compose up
-* send "summon" in discord chat to start the bot
-* ~send "help" in discord chat to get help about commands~
+* send "!summon" in discord chat to start the bot
+* ~send "!help" in discord chat to get help about commands~
