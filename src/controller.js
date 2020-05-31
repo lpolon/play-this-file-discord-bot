@@ -15,16 +15,18 @@ async function joinChannel(message, state) {
   }
 }
 
+// TODO: passar seek pro estado
+// TODO: aceitar argumento de tempo em "minuto: segundo"
 async function play(message, state) {
   /*
   if arg, get time in seconds, play with it.
   */
  if (state.connection === null) await joinChannel(message, state)
-  state.connection.play(createReadStream('./test.ogg'), {
+  state.connection.play(createReadStream('./public.ogg'), {
     seek: 0,
   });
-    sendEmbed('playing...', message);
-  }
+  sendEmbed('playing...', message);
+}
 
 // TODO: MÉTODO REWIND
 
@@ -37,11 +39,23 @@ function leave(message, state) {
 
 function pause(message, { currentPlaytime, connection: { dispatcher } }) {
   dispatcher.pause();
-  sendEmbed('paused', message);
+  // TODO: parse seconds to min:secs
+  sendEmbed(`paused @ ${currentPlaytime}s`, message);
 }
 function resume(message, {currentPlaytime, connection: {dispatcher}}) {
   dispatcher.resume();
-  sendEmbed('resumed', message);
+  currentPlaytime
+  sendEmbed(`resumed @ ${currentPlaytime}s`, message);
 }
 
 export { sendEmbed, joinChannel, play, pause, resume, leave };
+
+/*
+TODO: rewind...
+pega o stream time do dispatcher...
+converte de ms para s
+
+pega o argumento, adiciona ou subtrai o tempo em segundos
+
+pega o tempo e passa para o connection.play(createReadStream, {seek: tempo})
+*/

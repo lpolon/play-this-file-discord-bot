@@ -8,6 +8,11 @@ let commands;
 const prefix = process.env.BOT_PREFIX ?? '!';
 let state = {
   connection: null,
+  seekInput: 0,
+  get currentPlaytime() {
+    const streamTimeInSeconds = this.connection.dispatcher.streamTime / 1000;
+    return this.seekInput + streamTimeInSeconds;
+  },
 };
 
 const client = new Client();
@@ -27,7 +32,7 @@ client.on('message', async message => {
       message,
     );
   if (userInput === `${prefix}help`) return commands[userInput](message);
-  else await commands[userInput].method(message, state);
+  await commands[userInput].method(message, state);
 });
 
 client.login(process.env.BOT_TOKEN);
