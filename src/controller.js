@@ -1,6 +1,6 @@
 import { MessageEmbed } from 'discord.js';
 import { createReadStream } from 'fs';
-
+import * as util from './util';
 function sendEmbed(response = '', message) {
   const embed = new MessageEmbed();
   embed.setDescription(response);
@@ -15,17 +15,23 @@ async function joinChannel(message, state) {
   }
 }
 
-// TODO: passar seek pro estado
-// TODO: aceitar argumento de tempo em "minuto: segundo"
 async function play(message, state) {
-  /*
-  if arg, get time in seconds, play with it.
-  */
- if (state.connection === null) await joinChannel(message, state)
-  state.connection.play(createReadStream('./public.ogg'), {
-    seek: 0,
+  const { content } = message;
+  // se nenhum argumento for passado, seekInput será undefined e o parse retornará 0.
+  const [, seekInputString] = content.split(/ +/);
+  let seekInput;
+  try {
+    seekInput = util.parseStringToSeekTime(seekInputString);
+    console.log('seekInput OK?', seekInput);
+  } catch (error) {
+    return sendEmbed(error.message, message);
+  }
+  if (state.connection === null) await joinChannel(message, state);
+  state.connection.play(createReadStream('./test.ogg'), {
+    seek: seekInput,
   });
-  sendEmbed('playing...', message);
+  state.seekInput = seekInput;
+  sendEmbed(`playing @ ${state.currentPlaytime} seconds`, message);
 }
 
 // TODO: MÉTODO REWIND
@@ -34,7 +40,7 @@ function leave(message, state) {
   state.connection.disconnect();
   state.connection = null;
   state.seekInput = 0;
-  sendEmbed('bye!', message)
+  sendEmbed('bye!', message);
 }
 
 function pause(message, { currentPlaytime, connection: { dispatcher } }) {
@@ -42,9 +48,9 @@ function pause(message, { currentPlaytime, connection: { dispatcher } }) {
   // TODO: parse seconds to min:secs
   sendEmbed(`paused @ ${currentPlaytime}s`, message);
 }
-function resume(message, {currentPlaytime, connection: {dispatcher}}) {
+function resume(message, { currentPlaytime, connection: { dispatcher } }) {
   dispatcher.resume();
-  currentPlaytime
+  currentPlaytime;
   sendEmbed(`resumed @ ${currentPlaytime}s`, message);
 }
 

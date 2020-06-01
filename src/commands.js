@@ -8,7 +8,13 @@ export default {
   },
   play: {
     method: controller.play,
-    description: `start audio`,
+    description: `starts audio
+    accepts one argument as the seek time.
+    Examples:
+    42m
+    1h2m3s
+    200m453s
+    `,
   },
   pause: {
     method: controller.pause,
