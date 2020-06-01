@@ -7,31 +7,17 @@ function buildCommands(prefix = '!') {
   }, {});
 }
 
-// two passes. First one return a object representing the string. i. e.: 1h2m3s -> {h: 1, m: 2, s: 3}
-// second pass returns integer representing input in seconds + 60.
-function parseStringToSeekTime(string) {
-  if (typeof string === 'undefined') return 0
-  let timeString = '';
-  const conversionDic = {
-    h: value => Number(value) * 60 * 60,
-    m: value => Number(value) * 60,
-    s: value => Number(value),
-  };
-  const hashtable = string.split('').reduce((acc, e) => {
-    if (e in conversionDic) {
-      if (timeString === '') return acc;
-      acc[e] = timeString;
-      timeString = '';
-    } else timeString += e;
-    return acc;
-  }, {});
-  // check length, return invalid input
-  const hashtableEntriesArr = Object.entries(hashtable)
-  if (hashtableEntriesArr.length === 0) throw Error(`invalid !play argument input. It must have at least one character value: ${Object.keys(conversionDic).join(', ')}`)
-  return hashtableEntriesArr.reduce((seconds, [key, value]) => {
-    seconds += conversionDic[key](value)
-    return seconds
-  }, 60)
+function parseStringToSeekTime(timeString) {
+  if (typeof timeString === 'undefined') return 0 // if no arguments, we default to -1:00
+  const match = timeString.match(/(-)?(\d{1,3}):(\d{2})/)
+  if (match === null)
+      throw Error('Invalid time, please use Dota times like: `02:03` or `-01:12`')
+  let time = Number(match[2])*60 + Number(match[3])
+  if (match[1] === '-')
+      time = 60 - time;
+  else
+      time = 60 + time;
+  return time
 }
 
 parseStringToSeekTime(undefined) //?
