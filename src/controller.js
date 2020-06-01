@@ -27,7 +27,7 @@ async function play(message, state) {
     return sendEmbed(error.message, message);
   }
   if (state.connection === null) await joinChannel(message, state);
-  state.connection.play(createReadStream('./test.ogg'), {
+  state.connection.play(createReadStream('./public.ogg'), {
     seek: seekInput,
   });
   state.seekInput = seekInput;

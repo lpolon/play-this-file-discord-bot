@@ -20,6 +20,4 @@ function parseStringToSeekTime(timeString) {
   return time
 }
 
-parseStringToSeekTime(undefined) //?
-
 export { buildCommands, parseStringToSeekTime };
